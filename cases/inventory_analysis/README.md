@@ -1,4 +1,4 @@
-# Case: inventory_analysis
+# Case: Inventory Analysis
 
 ## Overview
 - Business question(s): How can inventory levels be optimized to reduce stockouts, excess inventory, and carrying costs?
