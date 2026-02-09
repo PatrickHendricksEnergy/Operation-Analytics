@@ -1,0 +1,26 @@
+{
+  "kpis": {
+    "total_revenue": 577604.8187380086,
+    "avg_revenue": 5776.048187380086,
+    "total_cost_proxy": 2776344.626247419,
+    "total_logistics_cost": 53479.39312301607,
+    "total_manufacturing_cost": 2722865.233124403,
+    "avg_defect_rate": 0.0227715799273961,
+    "top_product_type": "skincare",
+    "top_supplier": "Supplier 1",
+    "avg_logistics_cost_per_unit": 2.9177699093007896
+  },
+  "regression_metrics": {
+    "mae": 2512.403001955642,
+    "rmse": 2805.7941619719154,
+    "r2": 0.020363482729465532
+  },
+  "classification_metrics": {
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "roc_auc": 1.0
+  },
+  "classification_target": "inspection_fail"
+}

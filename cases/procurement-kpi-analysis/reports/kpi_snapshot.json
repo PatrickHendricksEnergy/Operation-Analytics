@@ -1,0 +1,22 @@
+{
+  "supplier_count": 5,
+  "total_gross_po_value": 49304822.86,
+  "total_negotiated_po_value": 45373696.39,
+  "total_realized_savings": 3931126.4699999993,
+  "avg_savings_rate_pct": 0.07968088422889182,
+  "total_defective_cost_exposure": 2567996.73,
+  "avg_defect_rate_pct": 0.05779952131272036,
+  "avg_lead_time_days": 10.799709724238026,
+  "late_delivery_threshold_days": 16.0,
+  "late_delivery_rate": 0.18018018018018017,
+  "non_compliance_rate": 0.17631917631917632,
+  "total_spend_at_risk": 6986051.380000001,
+  "total_orders": 777,
+  "order_date_min": "2022-01-01",
+  "order_date_max": "2024-01-01",
+  "missing_delivery_rate": 0.11196911196911197,
+  "delivery_date_min": "2022-01-06",
+  "delivery_date_max": "2024-01-12",
+  "top_savings_supplier": "Beta_Supplies",
+  "top_savings_category": "MRO"
+}

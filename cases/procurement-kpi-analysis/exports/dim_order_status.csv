@@ -1,0 +1,5 @@
+order_status_key,order_status
+1,Cancelled
+2,Delivered
+3,Partially Delivered
+4,Pending

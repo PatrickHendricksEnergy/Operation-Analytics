@@ -1,0 +1,6 @@
+supplier_key,supplier,supplier_risk_score,supplier_segment
+1,Alpha_Inc,0.15765834625800831,Strategic
+2,Beta_Supplies,0.7578537370694345,Governance Risk
+3,Delta_Logistics,0.9031805225144132,Governance Risk
+4,Epsilon_Group,0.29372221218512873,Cost Trap
+5,Gamma_Co,0.19054963293128563,Strategic

@@ -1,0 +1,46 @@
+table,column,type,%missing,description,example_value
+bi_fact_procurement_kpi_analysis,po_id,object,0.0,Purchase order identifier,PO-00001
+bi_fact_procurement_kpi_analysis,order_date_key,Int64,0.0,Order date key (YYYYMMDD),20231017
+bi_fact_procurement_kpi_analysis,delivery_date_key,Int64,11.196911196911197,Delivery date key (YYYYMMDD),20231025
+bi_fact_procurement_kpi_analysis,supplier_key,int64,0.0,Supplier surrogate key,1
+bi_fact_procurement_kpi_analysis,item_category_key,int64,0.0,Item category surrogate key,3
+bi_fact_procurement_kpi_analysis,order_status_key,int64,0.0,Order status surrogate key,1
+bi_fact_procurement_kpi_analysis,compliance_key,int64,0.0,Compliance surrogate key,2
+bi_fact_procurement_kpi_analysis,quantity,float64,0.0,Ordered quantity,1176.0
+bi_fact_procurement_kpi_analysis,unit_price,float64,0.0,Unit price before negotiation,20.13
+bi_fact_procurement_kpi_analysis,negotiated_price,float64,0.0,Negotiated unit price,17.81
+bi_fact_procurement_kpi_analysis,defective_units,float64,17.503217503217503,Reported defective units (raw),235.0
+bi_fact_procurement_kpi_analysis,defective_units_filled,float64,0.0,Defective units with missing filled as 0,0.0
+bi_fact_procurement_kpi_analysis,defective_units_missing,int64,0.0,Flag for missing defective units,1
+bi_fact_procurement_kpi_analysis,gross_po_value,float64,0.0,Quantity * unit_price,23672.879999999997
+bi_fact_procurement_kpi_analysis,negotiated_po_value,float64,0.0,Quantity * negotiated_price,20944.559999999998
+bi_fact_procurement_kpi_analysis,realized_savings,float64,0.0,gross_po_value - negotiated_po_value,2728.3199999999997
+bi_fact_procurement_kpi_analysis,savings_rate_pct,float64,0.0,Realized savings / gross_po_value,0.11525086934923001
+bi_fact_procurement_kpi_analysis,defect_rate_pct,float64,0.0,Defective units / quantity,0.0
+bi_fact_procurement_kpi_analysis,defective_cost_exposure,float64,0.0,Defective units * negotiated_price,0.0
+bi_fact_procurement_kpi_analysis,procurement_lead_time_days,float64,11.325611325611327,Delivery date minus order date,8.0
+bi_fact_procurement_kpi_analysis,non_compliant_flag,int64,0.0,1 if compliance == No,0
+bi_fact_procurement_kpi_analysis,spend_at_risk,float64,0.0,Negotiated value for non-compliant orders,0.0
+bi_fact_procurement_kpi_analysis,order_status_risk,float64,0.0,Risk score derived from order status,1.0
+bi_fact_procurement_kpi_analysis,currency_code,object,0.0,Currency code for monetary values (ISO 4217),USD
+dim_supplier,supplier_key,int64,0.0,Supplier surrogate key,1
+dim_supplier,supplier,object,0.0,Supplier name,Alpha_Inc
+dim_supplier,supplier_risk_score,float64,0.0,Composite supplier risk score,0.15765834625800831
+dim_supplier,supplier_segment,object,0.0,Supplier segmentation label,Strategic
+dim_item_category,item_category_key,int64,0.0,Item category surrogate key,1
+dim_item_category,item_category,object,0.0,Item category,Electronics
+dim_order_status,order_status_key,int64,0.0,Order status surrogate key,1
+dim_order_status,order_status,object,0.0,Order status,Cancelled
+dim_compliance,compliance_key,int64,0.0,Compliance surrogate key,1
+dim_compliance,compliance,object,0.0,Compliance status,No
+dim_date,date,datetime64[ns],0.0,Calendar date,2022-01-01 00:00:00
+dim_date,date_key,int64,0.0,Date key (YYYYMMDD),20220101
+dim_date,year,int32,0.0,Calendar year,2022
+dim_date,quarter,int32,0.0,Calendar quarter,1
+dim_date,month,int32,0.0,Calendar month,1
+dim_date,month_name,object,0.0,Calendar month name,January
+dim_date,day,int32,0.0,Day of month,1
+dim_date,day_of_week,int32,0.0,Day of week (1=Mon),6
+dim_date,day_name,object,0.0,Day name,Saturday
+dim_date,week_of_year,int64,0.0,ISO week of year,52
+dim_date,is_weekend,int64,0.0,Weekend flag,1
