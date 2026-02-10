@@ -4,7 +4,6 @@
 This repository contains executive-ready analytics cases with reproducible pipelines, BI-ready exports, and decision-oriented summaries.
 
 ### Cases
-- `cases/company-purchasing-dataset`: Transaction-level spend analysis with price variance, segmentation, and savings estimation.
 - `cases/procurement-kpi-analysis`: Supplier performance, compliance, and delivery timing KPIs.
 - `cases/supply-chain-analysis`: Driver analysis for revenue, costs, and quality without time series.
 - `cases/inventory_analysis`: Inventory optimization (EOQ, reorder points, ABC, turnover).
