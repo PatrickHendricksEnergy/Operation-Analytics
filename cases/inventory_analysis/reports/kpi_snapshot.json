@@ -1,8 +1,0 @@
-{
-  "total_sales": 32843306.73999999,
-  "total_purchases": 313511502.07,
-  "avg_inventory_value": 73879315.65,
-  "avg_inventory_turnover": 0.8271852055051384,
-  "total_carrying_cost": 14775863.130000003,
-  "stockout_risk_items": 5641
-}

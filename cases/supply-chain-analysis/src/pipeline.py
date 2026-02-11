@@ -227,17 +227,17 @@ def _write_bi_quickstart(path: Path) -> None:
 # BI Quickstart
 
 ## Power BI
-1. Get Data -> Text/CSV -> select `exports/fact_supply_chain.csv`.
-2. Load each `exports/dim_*.csv` file.
-3. Create relationships on `*_key` fields as described in `exports/star_schema.md`.
-4. Load `exports/flat_supply_chain_pivot_ready.csv` for quick pivots.
+1. Get Data -> Text/CSV -> select `data/processed/fact_supply_chain.csv`.
+2. Load each `data/processed/dim_*.csv` file.
+3. Create relationships on `*_key` fields as described in `data/processed/star_schema.md`.
+4. Load `data/processed/flat_supply_chain_pivot_ready.csv` for quick pivots.
 
 ## Tableau
-1. Connect to `exports/fact_supply_chain.csv`.
-2. Add each `exports/dim_*.csv` as related tables on keys.
+1. Connect to `data/processed/fact_supply_chain.csv`.
+2. Add each `data/processed/dim_*.csv` as related tables on keys.
 
 ## Excel
-1. Open `exports/flat_supply_chain_pivot_ready.csv`.
+1. Open `data/processed/flat_supply_chain_pivot_ready.csv`.
 2. Insert -> PivotTable and build views by product, supplier, location, carrier, and route.
 """.strip()
     path.write_text(content)
@@ -260,6 +260,7 @@ def run(
     input_path: str | Path | None = None,
     reports_dir: str | Path | None = None,
     exports_dir: str | Path | None = None,
+    visuals_dir: str | Path | None = None,
 ) -> None:
     case_dir = Path(__file__).resolve().parents[1]
     if input_path:
@@ -268,10 +269,12 @@ def run(
         input_path = detect_csv(case_dir)
 
     reports_dir = Path(reports_dir) if reports_dir else case_dir / "reports"
-    exports_dir = Path(exports_dir) if exports_dir else case_dir / "exports"
+    exports_dir = Path(exports_dir) if exports_dir else case_dir / "data" / "processed"
+    visuals_dir = Path(visuals_dir) if visuals_dir else case_dir / "visuals"
 
     ensure_dir(reports_dir)
     ensure_dir(exports_dir)
+    ensure_dir(visuals_dir)
 
     df_raw = load_raw(input_path)
     df_clean = clean_data(df_raw)
@@ -366,7 +369,7 @@ def run(
         scenario_defect.to_csv(exports_dir / "scenario_defect_reduction.csv", index=False)
 
     # Visuals
-    chart_files = build_figures(df_feat, reports_dir)
+    chart_files = build_figures(df_feat, visuals_dir)
 
     # BI exports
     build_star_schema(df_feat, exports_dir)

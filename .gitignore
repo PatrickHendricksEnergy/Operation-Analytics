@@ -10,9 +10,7 @@ venv/
 .idea/
 .vscode/
 
+
 # Inventory analysis large files
-cases/inventory_analysis/Inventory Analysis data set/
-cases/inventory_analysis/exports/PurchasesFINAL12312016_clean.csv
-cases/inventory_analysis/exports/fact_inventory.csv
-cases/inventory_analysis/exports/flat_inventory_pivot_ready.csv
-cases/inventory_analysis/exports/fact_inventory.parquet
+
+shared/templates/

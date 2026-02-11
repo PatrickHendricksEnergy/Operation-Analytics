@@ -1,4 +1,0 @@
-material_type,eoq_units,reorder_point_units,avg_inventory_units,avg_lead_time_days,inventory_turnover,avg_inventory_value,carrying_cost,currency_code
-finished_goods,10506463.993473632,612995.5806451613,22.362157921015715,8.109236905910263,0.8271852055051384,56762715.44,11352543.088,USD
-raw_material,0.0,0.0,9.620328009759884,7.98793877890534,,13117857.435,2623571.487,USD
-wip,0.0,0.0,6.154906214112543,,,3998742.775,799748.555,USD

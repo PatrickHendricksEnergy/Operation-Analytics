@@ -1,57 +1,69 @@
-# Case: supply-chain-analysis
+# Supply Chain Analytics & Optimization (End-to-End Case Study)
 
-## Overview
-- Business question(s): Which products, suppliers, and logistics choices drive revenue, costs, and quality?
-- Audience: Supply chain leadership and operations.
-- Decision impact: Transportation optimization, supplier quality programs, and inventory strategy.
+## One-liner
+A decision-focused analytics project that links demand, inventory, supplier performance, logistics, and quality to reduce stockouts, lower carrying costs, and improve service levels.
 
-## Data
-- Source file: `supply_chain_data.csv`
-- Rows/columns: 100 / 24
-- Time coverage (if applicable): N/A (no date column)
+## Business Problem
+Manufacturing and distribution operations face stockouts, excess inventory, long lead times, and avoidable logistics/quality costs. This project identifies root causes and prioritizes actions.
+
+## Dataset
+Includes product/SKU, price, availability, units sold, revenue, stock levels, lead times, order quantities, shipping time and shipping cost per order (SKU batch), carrier, suppliers, manufacturing cost/lead time, inspection and defect rates, transportation modes/routes.
+
+## Key Questions
+- Which SKUs drive revenue but are at stockout risk?
+- Where are we holding excess inventory with low demand?
+- Which suppliers create the most lead-time risk or quality cost?
+- What carrier/mode/route combinations are high cost without speed benefit?
+- Which defects drive most quality loss (Pareto)?
 
 ## Approach
-- Ingest + cleaning (lead time ambiguity resolved)
-- KPI calculations (revenue, costs, defect rates, cost-to-serve)
-- Driver models (regression + classification)
-- BI exports (star schema + flat)
+- Data quality + standardization (SKU, supplier, lead time fields)
+- Demand & revenue segmentation
+- Inventory: ABC + turnover + stockout risk flags
+- Supplier scorecard: cost/quality/delivery and risk matrix
+- Logistics: cost vs speed trade-offs by carrier/mode/route
+- Quality: defect Pareto + cost impact
+- Recommendations: prioritized actions + expected impact
 
-## BI Model
-- Fact grain: One row per SKU/location/supplier record
-- Measures: revenue_generated, total_cost_proxy, defect_rate_scaled, logistics_cost_per_unit
-- Dimensions: dim_product, dim_supplier, dim_location, dim_carrier, dim_route, dim_mode
-- Join keys: product_key, supplier_key, location_key, carrier_key, route_key, mode_key
+## Key Insights (placeholders)
+- A small share of SKUs generates most revenue; several are understocked → stockout risk.
+- A large set of C-items ties up stock with slow turnover → working capital opportunity.
+- Supplier X and Y show higher lead time + defect rates → reliability risk concentration.
+- Certain routes/modes cost more without faster delivery → optimization potential.
+- Top defect sources explain the majority of quality issues → focused improvement ROI.
 
-## Exports
-- `exports/fact_supply_chain.csv` + `.parquet`
-- `exports/dim_*.csv` + `.parquet`
-- `exports/flat_supply_chain_pivot_ready.csv`
-- `exports/data_dictionary.csv`
-- `exports/star_schema.md`
-- `exports/segmentation_supply_chain.csv`
-- `exports/scenario_carrier_change.csv`
-- `exports/scenario_defect_reduction.csv`
-
-## Notebooks
-- `notebooks/01_eda.ipynb`
-- `notebooks/02_driver_models.ipynb`
-- `notebooks/03_executive_dashboard.ipynb`
-
-## Reports
-- `reports/EXEC_SUMMARY.md`
-- `reports/BI_Quickstart.md`
-- `reports/measures.md`
-- `reports/figures/`
+## Deliverables
+- Executive KPI dashboard
+- ABC classification + inventory policy recommendations
+- Supplier risk matrix + scorecard
+- Logistics optimization findings
+- Defect Pareto + quality action plan
+- Final prioritized roadmap
 
 ## How To Run
 ```bash
-python -m cases.supply-chain-analysis.src.pipeline --input supply_chain_data.csv --out reports --exports exports
+pip install -r requirements.txt
+python -m cases.supply-chain-analysis.src.pipeline --input data/raw/supply_chain_data.csv --out reports --exports data/processed --visuals visuals
 ```
 
-## Methods & Assumptions
-- Cost proxies assume manufacturing_costs scale with production volumes where available.
-- Lead time ambiguity resolved via lead_time_canonical.
+## Project Outputs
+![Executive KPI Dashboard](visuals/kpi_dashboard.png)
+![Revenue vs Availability (Stockout Risk)](visuals/stockout_risk_scatter.png)
+![Revenue by Price Band](visuals/price_vs_revenue.png)
+![Revenue by Product Type](visuals/revenue_by_product_type.png)
+![ABC Value Curve](visuals/abc_value_curve.png)
+![Inventory Turnover by SKU](visuals/inventory_turnover_by_sku.png)
+![Unit Margin Proxy by Product Type](visuals/margin_proxy_distribution.png)
+![Pareto Revenue by Supplier](visuals/pareto_revenue_by_supplier.png)
+![Supplier Risk Matrix](visuals/supplier_risk_matrix.png)
+![Lead Time Breakdown by Supplier](visuals/lead_time_breakdown_by_supplier.png)
+![Logistics Cost vs Time](visuals/logistics_cost_vs_time.png)
+![Cost per Order by Carrier and Route](visuals/cost_to_serve_by_carrier_route.png)
+![Shipping Cost Distribution by Transportation Mode](visuals/costs_by_transportation_mode.png)
+![Defect Cost Pareto](visuals/defect_pareto.png)
+![Defect Rate by Supplier](visuals/defect_rate_by_supplier.png)
+![Defect Rate Heatmap](visuals/defect_rate_heatmap.png)
+![Defect Rate by Supplier (Lollipop)](visuals/defect_rate_by_supplier_lollipop.png)
 
-## Limitations & Next Steps
-- No time dimension limits trend analysis and forecasting.
-- Carrier/route scenario results are observational, not causal.
+## Author
+Patrick Hendricks | Supply Chain & Data Analytics

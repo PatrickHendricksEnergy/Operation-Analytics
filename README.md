@@ -5,25 +5,17 @@ This repository contains executive-ready analytics cases with reproducible pipel
 
 ### Cases
 - `cases/procurement-kpi-analysis`: Supplier performance, compliance, and delivery timing KPIs.
-- `cases/supply-chain-analysis`: Driver analysis for revenue, costs, and quality without time series.
-- `cases/inventory_analysis`: Inventory optimization (EOQ, reorder points, ABC, turnover).
+- `cases/supply-chain-analysis`: Supply Chain Analytics & Optimization (end-to-end demand, inventory, logistics, and quality).
 
 ### Screenshots
-![Company Purchasing Spend Trend](cases/company-purchasing-dataset/reports/figures/spend_trend_monthly.png)
 ![Procurement Order Value Trend](cases/procurement-kpi-analysis/reports/figures/order_value_trend_monthly.png)
-![Supply Chain Revenue by Product](cases/supply-chain-analysis/reports/figures/revenue_by_product_type.png)
-![Inventory Monthly Sales Trend](cases/inventory_analysis/reports/figures/monthly_sales_trend.png)
+![Supply Chain KPI Dashboard](cases/supply-chain-analysis/visuals/kpi_dashboard.png)
 
 ### Quick Run
-```bash
-python -m shared.src.run_case --case company-purchasing-dataset
-python -m shared.src.run_case --case procurement-kpi-analysis
-python -m shared.src.run_case --case supply-chain-analysis
-python -m shared.src.run_case --case inventory_analysis
-```
+See each case README for the exact run command and input expectations.
 
 ## Data Availability
-Large raw datasets are excluded from GitHub. Each case README includes a `data_sample/` folder and instructions to run with full data.
+Large raw datasets are excluded from GitHub. Each case README includes sample data and instructions to run with full data.
 
 ## BI-Ready Exports
 Each case generates a star schema and flat pivot file:

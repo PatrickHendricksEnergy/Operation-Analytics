@@ -92,12 +92,36 @@ def _apply_scaled_axis(ax, axis: str, label: str, values, currency: bool = False
             ax.set_ylabel(f"{label} ({unit})" if unit else label)
 
 
+_ACRONYM_MAP = {
+    "Mro": "MRO",
+    "Sku": "SKU",
+    "Po": "PO",
+    "Kpi": "KPI",
+    "Sla": "SLA",
+    "Eoq": "EOQ",
+    "Abc": "ABC",
+    "Wip": "WIP",
+    "Usd": "USD",
+}
+
+
+def _format_label(series: pd.Series) -> pd.Series:
+    text = (
+        series.astype("string")
+        .str.replace("_", " ")
+        .str.strip()
+        .str.title()
+    )
+    return text.replace(_ACRONYM_MAP)
+
+
 def savings_by_supplier(df: pd.DataFrame, path: Path) -> None:
     if "supplier" not in df.columns or "realized_savings" not in df.columns:
         return
     _setup()
     agg = (
-        df.groupby("supplier", dropna=False)["realized_savings"]
+        df.assign(supplier=_format_label(df["supplier"]))
+        .groupby("supplier", dropna=False)["realized_savings"]
         .sum()
         .sort_values(ascending=False)
         .head(10)
@@ -108,7 +132,8 @@ def savings_by_supplier(df: pd.DataFrame, path: Path) -> None:
     ax.set_title("Realized Savings by Supplier")
     ax.set_xlabel("Supplier")
     ax.tick_params(axis="x", rotation=30)
-    _apply_scaled_axis(ax, "y", "Realized Savings", agg["realized_savings"], currency=True)
+    ax.yaxis.set_major_formatter(FuncFormatter(lambda x, _pos: f"{x/1e3:,.0f}"))
+    ax.set_ylabel("Realized Savings (USD, Thousands)")
     _save(fig, path)
 
 
@@ -117,7 +142,8 @@ def order_value_by_supplier(df: pd.DataFrame, path: Path) -> None:
         return
     _setup()
     agg = (
-        df.groupby("supplier", dropna=False)["negotiated_po_value"]
+        df.assign(supplier=_format_label(df["supplier"]))
+        .groupby("supplier", dropna=False)["negotiated_po_value"]
         .sum()
         .sort_values(ascending=False)
         .reset_index()
@@ -158,7 +184,8 @@ def savings_by_category(df: pd.DataFrame, path: Path) -> None:
         return
     _setup()
     agg = (
-        df.groupby("item_category", dropna=False)["realized_savings"]
+        df.assign(item_category=_format_label(df["item_category"]))
+        .groupby("item_category", dropna=False)["realized_savings"]
         .sum()
         .sort_values(ascending=False)
         .head(10)
@@ -256,6 +283,7 @@ def defect_cost_vs_savings(df: pd.DataFrame, path: Path) -> None:
     if not required.issubset(df.columns):
         return
 
+    temp = df.assign(supplier=_format_label(df["supplier"]))
     group_cols = ["supplier"]
     if "item_category" in df.columns:
         # Optional: switch to supplier + category by uncommenting next line
@@ -263,7 +291,7 @@ def defect_cost_vs_savings(df: pd.DataFrame, path: Path) -> None:
         pass
 
     agg = (
-        df.groupby(group_cols, dropna=False)[["realized_savings", "defective_cost_exposure"]]
+        temp.groupby(group_cols, dropna=False)[["realized_savings", "defective_cost_exposure"]]
         .sum()
         .reset_index()
     )
@@ -344,14 +372,134 @@ def defect_cost_vs_savings(df: pd.DataFrame, path: Path) -> None:
 def lead_time_distribution(df: pd.DataFrame, path: Path) -> None:
     if "procurement_lead_time_days" not in df.columns:
         return
+    temp = df.copy()
+    if "order_status" in temp.columns:
+        cancelled = temp["order_status"].astype(str).str.strip().str.lower().eq("cancelled")
+        temp = temp[~cancelled]
+    if temp.empty:
+        return
     _setup()
     fig, ax = plt.subplots(figsize=(10, 6))
-    sns.histplot(df["procurement_lead_time_days"].dropna(), bins=20, ax=ax)
-    ax.set_title("Procurement Lead Time Distribution")
+    if "item_category" in temp.columns:
+        temp = temp.dropna(subset=["procurement_lead_time_days", "item_category"])
+        if temp.empty:
+            return
+        temp["item_category"] = _format_label(temp["item_category"])
+        order = (
+            temp.groupby("item_category")["procurement_lead_time_days"]
+            .median()
+            .sort_values()
+            .index
+        )
+        sns.boxplot(
+            data=temp,
+            x="procurement_lead_time_days",
+            y="item_category",
+            order=order,
+            ax=ax,
+            color="#4C72B0",
+            fliersize=3,
+            linewidth=1,
+        )
+        sns.stripplot(
+            data=temp,
+            x="procurement_lead_time_days",
+            y="item_category",
+            order=order,
+            ax=ax,
+            color="#333333",
+            alpha=0.35,
+            size=2,
+            jitter=0.2,
+        )
+        ax.set_ylabel("Item Category")
+    else:
+        temp = temp.dropna(subset=["procurement_lead_time_days"])
+        if temp.empty:
+            return
+        sns.boxplot(
+            data=temp,
+            x="procurement_lead_time_days",
+            ax=ax,
+            color="#4C72B0",
+            fliersize=3,
+            linewidth=1,
+        )
+        sns.stripplot(
+            data=temp,
+            x="procurement_lead_time_days",
+            ax=ax,
+            color="#333333",
+            alpha=0.35,
+            size=2,
+            jitter=0.2,
+        )
+        ax.set_ylabel("")
+    ax.set_title("Procurement Lead Time by Item Category")
     ax.set_xlabel("Lead Time (Days)")
-    ax.set_ylabel("Count")
-    _apply_scaled_axis(ax, "x", "Lead Time (Days)", df["procurement_lead_time_days"])
-    _apply_scaled_axis(ax, "y", "Count", ax.get_yticks())
+    ax.grid(axis="x", linestyle="--", alpha=0.4)
+    ax.xaxis.set_major_formatter(FuncFormatter(lambda x, pos: f"{x:.0f}"))
+    _apply_scaled_axis(ax, "x", "Lead Time (Days)", temp["procurement_lead_time_days"])
+    _save(fig, path)
+
+
+def avg_delivery_lag_by_supplier(df: pd.DataFrame, path: Path) -> None:
+    required = {"supplier", "procurement_lead_time_days"}
+    if not required.issubset(df.columns):
+        return
+    temp = df.dropna(subset=["procurement_lead_time_days"]).copy()
+    temp["supplier"] = _format_label(temp["supplier"])
+    if temp.empty:
+        return
+    agg = (
+        temp.groupby("supplier", dropna=False)["procurement_lead_time_days"]
+        .mean()
+        .sort_values(ascending=False)
+        .head(10)
+        .reset_index()
+    )
+    agg = agg.sort_values("procurement_lead_time_days", ascending=True).reset_index(drop=True)
+    _setup()
+    fig, ax = plt.subplots(figsize=(12, 6))
+    y_pos = np.arange(len(agg))
+    ax.hlines(
+        y=y_pos,
+        xmin=0,
+        xmax=agg["procurement_lead_time_days"],
+        color="#B0B0B0",
+        linewidth=2,
+    )
+    ax.scatter(
+        agg["procurement_lead_time_days"],
+        y_pos,
+        color="#4C72B0",
+        s=80,
+        zorder=3,
+    )
+    ax.set_title("Average Delivery Lag by Supplier")
+    ax.set_xlabel("Avg Delivery Lag (Days)")
+    ax.set_ylabel("Supplier")
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(agg["supplier"])
+    ax.tick_params(axis="y", labelsize=9)
+    ax.grid(axis="x", linestyle="--", alpha=0.4)
+
+    benchmark = 10
+    ax.axvline(benchmark, color="#D9534F", linestyle="--", linewidth=1.5)
+    ax.annotate(
+        "10-day benchmark",
+        xy=(benchmark, 0.98),
+        xycoords=("data", "axes fraction"),
+        xytext=(6, 0),
+        textcoords="offset points",
+        ha="left",
+        va="top",
+        fontsize=9,
+        color="#D9534F",
+    )
+
+    max_val = agg["procurement_lead_time_days"].max()
+    ax.set_xlim(0, max(max_val, benchmark) * 1.15 if max_val else benchmark * 1.5)
     _save(fig, path)
 
 
@@ -361,6 +509,8 @@ def lead_time_heatmap(df: pd.DataFrame, path: Path) -> None:
         return
 
     temp = df.copy()
+    temp["supplier"] = _format_label(temp["supplier"])
+    temp["item_category"] = _format_label(temp["item_category"])
     status_label = "All Orders"
     if "order_status" in temp.columns:
         delivered_mask = temp["order_status"].astype(str).str.strip().str.lower().eq("delivered")
@@ -400,8 +550,9 @@ def order_status_impact(df: pd.DataFrame, path: Path) -> None:
     if "order_status" not in df.columns or "negotiated_po_value" not in df.columns:
         return
     _setup()
+    temp = df.assign(order_status=_format_label(df["order_status"]))
     agg = (
-        df.groupby("order_status", dropna=False)["negotiated_po_value"]
+        temp.groupby("order_status", dropna=False)["negotiated_po_value"]
         .sum()
         .sort_values(ascending=False)
         .reset_index()
@@ -420,7 +571,7 @@ def order_status_distribution(df: pd.DataFrame, path: Path) -> None:
         return
 
     _setup()
-    counts = df["order_status"].value_counts(dropna=False)
+    counts = _format_label(df["order_status"]).value_counts(dropna=False)
     if counts.empty:
         return
 
@@ -453,7 +604,8 @@ def compliance_spend(df: pd.DataFrame, path: Path) -> None:
         return
     _setup()
     agg = (
-        df.groupby("compliance", dropna=False)["negotiated_po_value"]
+        df.assign(compliance=_format_label(df["compliance"]))
+        .groupby("compliance", dropna=False)["negotiated_po_value"]
         .sum()
         .sort_values(ascending=False)
         .reset_index()
@@ -494,7 +646,9 @@ def supplier_risk_score(df: pd.DataFrame, path: Path) -> None:
     if "supplier" not in df.columns or "supplier_risk_score" not in df.columns:
         return
     _setup()
-    agg = df.sort_values("supplier_risk_score", ascending=False).head(10)
+    agg = df.assign(supplier=_format_label(df["supplier"])).sort_values(
+        "supplier_risk_score", ascending=False
+    ).head(10)
     fig, ax = plt.subplots(figsize=(12, 6))
     sns.barplot(data=agg, x="supplier", y="supplier_risk_score", ax=ax, color="#937860")
     ax.set_title("Supplier Risk Score")
@@ -509,7 +663,8 @@ def supplier_risk_matrix(df: pd.DataFrame, path: Path) -> None:
     if not required.issubset(df.columns):
         return
 
-    temp = df[list(required)].dropna()
+    temp = df[list(required)].dropna().copy()
+    temp["supplier"] = _format_label(temp["supplier"])
     if temp.empty:
         return
 
@@ -602,6 +757,7 @@ def pareto_metric(df: pd.DataFrame, metric: str, path: Path, title: str) -> None
         return
     _setup()
     temp = df[["supplier", metric]].copy()
+    temp["supplier"] = _format_label(temp["supplier"])
     temp = temp.sort_values(metric, ascending=False).reset_index(drop=True)
     total = temp[metric].sum()
     temp["cum_pct"] = temp[metric].cumsum() / total if total else 0
@@ -630,6 +786,7 @@ def build_figures(df: pd.DataFrame, supplier_df: pd.DataFrame, reports_dir: str 
 
     outputs = []
     paths = {
+        "avg_delivery_lag_by_supplier": fig_dir / "avg_delivery_lag_by_supplier.png",
         "order_value_by_supplier": fig_dir / "order_value_by_supplier.png",
         "order_value_trend_monthly": fig_dir / "order_value_trend_monthly.png",
         "savings_by_supplier": fig_dir / "savings_by_supplier.png",
@@ -645,6 +802,7 @@ def build_figures(df: pd.DataFrame, supplier_df: pd.DataFrame, reports_dir: str 
         "pareto_savings": fig_dir / "pareto_savings.png",
     }
 
+    avg_delivery_lag_by_supplier(df, paths["avg_delivery_lag_by_supplier"])
     order_value_by_supplier(df, paths["order_value_by_supplier"])
     order_value_trend_monthly(df, paths["order_value_trend_monthly"])
     savings_by_supplier(df, paths["savings_by_supplier"])

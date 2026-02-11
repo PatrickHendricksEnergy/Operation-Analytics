@@ -8,9 +8,10 @@ from shared.src.common_etl import read_csv
 
 
 def detect_csv(case_dir: Path) -> Path:
-    candidates = list(case_dir.glob("*.csv"))
+    data_dir = case_dir / "data" / "raw"
+    candidates = list(data_dir.glob("*.csv"))
     if not candidates:
-        raise FileNotFoundError(f"No CSV found in {case_dir}")
+        raise FileNotFoundError(f"No CSV found in {data_dir}")
     # Prefer supply_chain_data.csv if present
     for c in candidates:
         if c.name.lower() == "supply_chain_data.csv":

@@ -23,6 +23,7 @@
 ## Methods & Assumptions
 - Missing Defective_Units are treated as 0 for defect rate calculations and flagged via defective_units_missing.
 - All metrics computed from provided fields; no forecasting is performed.
+- Delivery lag chart includes a 10-day benchmark line for SLA context.
 
 ## Limitations & Next Steps
 - Missing delivery dates on 11.20% of orders limit lead time analysis.
