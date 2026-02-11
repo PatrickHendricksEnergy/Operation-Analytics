@@ -58,6 +58,7 @@
 - Recommendation: set category‑specific lead‑time SLAs (MRO ≤10 days; Electronics ≤9 days) and add safety stock where SLA gaps persist.
 
 <br>
+
 ### Lead Time Heatmap (Supplier × Category)
 ![Lead Time Heatmap](figures/lead_time_heatmap.png)
 - Worst supplier‑category pairs are Delta_Logistics × MRO (13.3 days), Beta_Supplies × Raw Materials (11.9), and Epsilon_Group × Office Supplies (11.9).
