@@ -15,7 +15,7 @@
 - The top 3 suppliers (Beta_Supplies $9.86M, Epsilon_Group $9.85M, Delta_Logistics $9.24M) represent 63.8% of total spend.
 - Recommendation: lock annual pricing + SLAs with these three, and require quarterly business reviews tied to delivery and defect KPIs.
 
-
+<br>
 
 ### Order Value Trend (Monthly)
 ![Order Value Trend](figures/order_value_trend_monthly.png)
