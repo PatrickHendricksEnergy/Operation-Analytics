@@ -1,4 +1,4 @@
-# Executive Summary — procurement-kpi-analysis
+# Executive Summary — Procurement KPI Analysis
 
 ## Headline Findings
 - Dataset covers 777 purchase orders across 5 suppliers (Order_Date 2022-01-01 to 2024-01-01); Delivery_Date through 2024-01-12.
@@ -12,7 +12,7 @@
 
 ### Order Value by Supplier
 ![Order Value by Supplier](figures/order_value_by_supplier.png)
-- The top 3 suppliers (Beta_Supplies $9.86M, Epsilon_Group $9.85M, Delta_Logistics $9.24M) represent 63.8% of total spend.
+- The top 3 suppliers (Beta_Supplies $9.86M, Epsilon_Group $9.85M, Delta Logistics $9.24M) represent 63.8% of total spend.
 - Recommendation: lock annual pricing + SLAs with these three, and require quarterly business reviews tied to delivery and defect KPIs.
 
 <br>

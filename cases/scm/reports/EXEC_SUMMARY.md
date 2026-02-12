@@ -175,6 +175,9 @@ Haircare shows the widest margin dispersion and highest upside, indicating prici
 **Quality target**
 - Target defect rate is set at 2.0%, aligned to the KPI threshold used in the dashboard (benchmark for mature supplier quality performance).
 
+**Executive view**
+- A lollipop-style supplier defect view can be used as a compact, executive‑friendly ranking when a simplified chart is preferred.
+
 **Decisions enabled**
 - Focus quality improvement on Pareto suppliers and high-defect product types.
 - Quantify defect-related rework or scrap savings in business cases.
