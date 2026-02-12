@@ -2,7 +2,7 @@
 
 ## Secrets Management
 - Never commit `.env` or API keys.
-- Use environment variables for credentials (e.g., `OPENAI_API_KEY`).
+- Use environment variables for credentials (e.g., `XXX_KEY`).
 - Rotate keys if exposure is suspected.
 
 ## Data Access

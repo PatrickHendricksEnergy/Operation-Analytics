@@ -1,31 +1,35 @@
 # Operation Analytics Portfolio
 
-## Overview
-This repository contains executive-ready analytics cases with reproducible pipelines, BI-ready exports, and decision-oriented summaries.
+## Executive Overview
+Decision-grade analytics cases that turn operational data into actions on cost, service, and risk. Each case includes executive summaries, visuals, and BI-ready exports for rapid adoption.
 
-### Cases
-- `cases/procurement-kpi-analysis`: Supplier performance, compliance, and delivery timing KPIs.
-- `cases/supply-chain-analysis`: Supply Chain Analytics & Optimization (end-to-end demand, inventory, logistics, and quality).
+## Portfolio Cases
+- `cases/procurement`: Supplier performance, compliance, delivery lag, and savings opportunities.
+- `cases/scm`: End-to-end supply chain optimization across demand, inventory, logistics, and quality.
 
-### Screenshots
-![Procurement Order Value Trend](cases/procurement-kpi-analysis/reports/figures/order_value_trend_monthly.png)
-![Supply Chain KPI Dashboard](cases/supply-chain-analysis/visuals/kpi_dashboard.png)
+## Decision Impact
+- Identify revenue concentration and SKU risk exposure.
+- Reduce lead-time variability and defect-driven cost leakage.
+- Optimize transport mode mix and carrier-route cost-to-serve.
+- Surface the highest-impact supplier risks and prioritize action plans.
 
-### Quick Run
-See each case README for the exact run command and input expectations.
+## Evidence Snapshots
+![Procurement Order Value Trend](cases/procurement/reports/figures/order_value_trend_monthly.png)
+![Supply Chain KPI Dashboard](cases/scm/reports/figures/kpi_dashboard.png)
+
+## Quick Start
+See each case README for exact run commands, inputs, and expected outputs.
 
 ## Data Availability
-Large raw datasets are excluded from GitHub. Each case README includes sample data and instructions to run with full data.
+Large raw datasets are excluded from GitHub. Each case README includes sample data and guidance for full data runs.
 
 ## BI-Ready Exports
-Each case generates a star schema and flat pivot file:
-- `exports/bi_fact_<case>.csv` + `.parquet`
-- `exports/dim_*.csv` + `.parquet`
-- `exports/flat_<case>_pivot_ready.csv`
-- `exports/data_dictionary.csv`
-- `exports/star_schema.md`
+- SCM exports live under `cases/scm/data/processed` (facts, dims, flat pivots).
+- Procurement exports live under `cases/procurement/data/processed/exports`.
+- Flat pivots are in `data/processed/*_pivot_ready.csv` (or `data/processed/exports/*_pivot_ready.csv`).
+- Data dictionary and schema are in `data/processed/data_dictionary.csv` and `data/processed/star_schema.md`.
 
-### Conventions
+## Conventions
 - `snake_case` columns
 - Surrogate keys for dimensions (`*_key`)
 - `date_key` (YYYYMMDD int) for time joins
